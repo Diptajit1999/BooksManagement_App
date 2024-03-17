@@ -4,6 +4,7 @@ const bookRouter = express.Router();
 const { BookModel } = require("../model/book.model");
 const { UserModel } = require("../model/user.module");
 const {auth}=require("../middleware/auth.middleware")
+const {roleAccess}=require("../middleware/authorization.middleware")
 // bookRouter.get("/create",(req,res)=>{
 //     res.status(200).send("books route wip...")
 // })
@@ -11,7 +12,7 @@ const {auth}=require("../middleware/auth.middleware")
 // module.exports={bookRouter}
 
 // Route to add a new book
-bookRouter.post("/add",auth, async (req, res) => {
+bookRouter.post("/add",auth,roleAccess(["Admin"]), async (req, res) => {
   try {
     const { title, author, ISBN } = req.body;
     const book = new BookModel({
@@ -37,12 +38,13 @@ bookRouter.get("/",auth, async (req, res) => {
 });
 
 // Route to borrow a book
-bookRouter.post("/borrow/:bookId", auth, async (req, res) => {
+bookRouter.post("/borrow/:bookId", auth ,roleAccess(["Admin"]), async (req, res) => {
   try {
     const { bookId } = req.params;
     const { userId } = req.body;
 
     const book = await BookModel.findById(bookId);
+    console.log(book)
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }

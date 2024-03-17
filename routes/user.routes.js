@@ -41,7 +41,7 @@ userRouter.post("/login", async (req, res) => {
             .status(200)
             .send({
               msg: "User has been logged In",
-              token: jwt.sign({ course: "Bookhub101" }, process.env.SecretKey),
+              token: jwt.sign({ userID: user._id, role: user.role,username:user.username }, process.env.SecretKey),
             });
         } else {
           return res.status(400).send({ msgN: err.message });
