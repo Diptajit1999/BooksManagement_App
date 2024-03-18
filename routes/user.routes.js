@@ -67,6 +67,10 @@ userRouter.post("/logout", async (req, res) => {
     res.status(200).send({ msg: error.message });
   }
 });
+
+userRouter.get("/regenerate",(req,res)=>{
+res.send({msg:"token"})
+})
 module.exports = {
   userRouter,
 };
